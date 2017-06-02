@@ -6,3 +6,4 @@ To Do:
 - Canvas resizing
 - Crop/Select tools
 - Paintbucket tool
+- Clear canvas tool
