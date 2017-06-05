@@ -1,6 +1,7 @@
 # PyPaint
 # Sharon Gao, 2017
 import tkinter
+import pyscreenshot as ImageGrab
 
 # TOOLS
 PENCIL, BRUSH, ERASER, LINE, RECTANGLE, OVAL = list(range(6))
@@ -12,37 +13,36 @@ class Paint:
         self.lastx, self.lasty = None, None
         self.canvas.bind('<Button-1>', self.click)
         self.canvas.bind('<B1-Motion>', self.draw)
-        
-    # Updates current x and y coordinates 
+
     def draw(self, event):
         if self._tool is None or self._obj is None:
             return
         x, y = self.lastx, self.lasty
-        if self._tool in (LINE, RECTANGLE, OVAL): # continues drawing shape from anchor point
+        if self._tool in (LINE, RECTANGLE, OVAL):
             self.canvas.coords(self._obj, (x, y, event.x, event.y))
         elif self._tool in (PENCIL, BRUSH, ERASER):
             if self.lastx is not None and self.lasty is not None:
-                if self._tool == PENCIL: 
+                if self._tool == PENCIL:
                     self.canvas.create_line(self.lastx, self.lasty, event.x, event.y, fill = self._color)
-                elif self._tool == BRUSH: 
-                    if self._width is None: # if width is not set, default to width of 10 pixels
+                elif self._tool == BRUSH:
+                    if self._width is None:
                         x1, y1 = (event.x - 5), (event.y - 5)
                         x2, y2 = (event.x + 5), (event.y + 5)
-                    else: # else, set width to selected value
+                    else:
                         x1, y1 = (event.x - self._width), (event.y - self._width)
                         x2, y2 = (event.x + self._width), (event.y + self._width)
                     self.canvas.create_rectangle(x1, y1, x2, y2, fill = self._color, outline = self._color)
                 elif self._tool == ERASER:
-                    if self._width is None: # if width is not set, default to width of 30 pixels
+                    if self._width is None:
                         x1, y1 = (event.x - 15), (event.y - 15)
                         x2, y2 = (event.x + 15), (event.y + 15)
-                    else: # else, set width to selected value
+                    else:
                         x1, y1 = (event.x - self._width), (event.y - self._width)
                         x2, y2 = (event.x + self._width), (event.y + self._width)
                     self.canvas.create_rectangle(x1, y1, x2, y2, fill = "#ffffff", outline = "#ffffff")
-                self.lastx, self.lasty = event.x, event.y # update starting coordinates for next stroke
+                self.lastx, self.lasty = event.x, event.y
                 
-    # Updates new starting x and y coordinates for drawing
+    # Updates x and y coordinates
     # Anchors starting coordinates for shapes
     def click(self, event):
         if self._tool is None:
@@ -53,17 +53,17 @@ class Paint:
         if self._tool == LINE:
             self._obj = self.canvas.create_line((x, y, x, y), fill = self._color, width = self._width)
         elif self._tool == RECTANGLE:
-            if self._fill == True:  # if fill selected, fill rectangle with outline color
+            if self._fill == True:
                 self._obj = self.canvas.create_rectangle((x, y, x, y), outline = self._color, fill = self._color, width = self._width)
-            else: # otherwise, create a rectangle with only outline
+            else:
                 self._obj = self.canvas.create_rectangle((x, y, x, y), outline = self._color, width = self._width)
         elif self._tool == OVAL:
-            if self._fill == True: # if fill
+            if self._fill == True:
                 self._obj = self.canvas.create_oval((x, y, x, y), outline = self._color, fill = self._color, width = self._width)
-            else: # else stroke
+            else:
                 self._obj = self.canvas.create_oval((x, y, x, y), outline = self._color, width = self._width)
         self.lastx, self.lasty = x, y
-
+        
     # Value updaters
     def select_tool(self, tool):
         print('Tool', tool)
@@ -114,6 +114,9 @@ class Tool:
         self.stroke = tkinter.PhotoImage(file = "Images/stroke.gif")
         self.fill = tkinter.PhotoImage(file = "Images/fill.gif")
         
+        # FILE MANAGEMENT ICONS
+        self.save = tkinter.PhotoImage(file = "Images/save.gif")
+        
         TOOLS = [
             (self.pencil, PENCIL),
             (self.brush, BRUSH),
@@ -156,6 +159,7 @@ class Tool:
         self._curr_color = None
         self._curr_width = None
         self._curr_fill = None
+        
         # Create and place icons
         for img, name in TOOLS:
             lbl = tkinter.Label(frame1, relief='raised', image = img)
@@ -169,6 +173,11 @@ class Tool:
             lbl._color = name
             lbl.bind('<Button-1>', self.update_color)
             lbl.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame1, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        lbl = tkinter.Label(frame1, relief = 'raised', image = self.save)
+        lbl.bind('<Button-1>', self.save_image)
+        lbl.pack(padx = 6, pady = 3)
         frame1.pack(side = 'left', fill = 'y', expand = True, pady = 6)
         
         for img, value in WIDTH:
@@ -183,6 +192,25 @@ class Tool:
             lbl._fill = value
             lbl.bind('<Button-1>', self.update_fill)
             lbl.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        spacer = tkinter.Label(frame2, image = self.white)
+        spacer.pack(padx = 6, pady = 3)
+        lbl = tkinter.Label(frame2, relief = 'raised', image = self.save)
+        lbl.bind('<Button-1>', self.save_image)
+        lbl.pack(padx = 6, pady = 3)
         frame2.pack(side='left', fill = 'y', expand = True, pady = 6)
         
     # Update current value and depress selected icon
@@ -217,16 +245,22 @@ class Tool:
         lbl['relief'] = 'sunken'
         self._curr_fill = lbl
         self.whiteboard.select_fill(lbl._fill)
+    
+    # Screenshot canvas area and save
+    def save_image(self, event):
+        x = root.winfo_x()
+        y = root.winfo_y()
+        im = ImageGrab.grab(bbox = (x + 88, y + 28, x + 894, y + 656))
+        im.save('screenshot.png')
+        im.show()
 
 
 root = tkinter.Tk()
+root.geometry("900x640+0+0")
 root.resizable(width = False, height = False)
+root.title("PyPaint")
 canvas = tkinter.Canvas(highlightbackground='black', width = 800, height = 600)
 whiteboard = Paint(canvas)
 tool = Tool(whiteboard)
 canvas.pack(fill = 'both', expand = True, padx=6, pady=6)
-
 root.mainloop()
-
-
-
