@@ -1,6 +1,6 @@
 # PyPaint
 # Sharon Gao, 2017
-import tkinter
+from tkinter import *
 import pyscreenshot as ImageGrab
 
 # TOOLS
@@ -84,38 +84,40 @@ class Paint:
 class Tool:
     def __init__(self, whiteboard, parent=None):
         # TOOL ICONS
-        self.pencil = tkinter.PhotoImage(file = "Images/pencil_tool.gif")
-        self.brush = tkinter.PhotoImage(file = "Images/brush_tool.gif")
-        self.eraser = tkinter.PhotoImage(file = "Images/eraser_tool.gif")
-        self.line = tkinter.PhotoImage(file = "Images/line_tool.gif")
-        self.rectangle = tkinter.PhotoImage(file = "Images/shape_tool.gif")
-        self.oval = tkinter.PhotoImage(file = "Images/oval_tool.gif")
+        self.pencil = PhotoImage(file = "Images/pencil_tool.gif")
+        self.brush = PhotoImage(file = "Images/brush_tool.gif")
+        self.eraser = PhotoImage(file = "Images/eraser_tool.gif")
+        self.line = PhotoImage(file = "Images/line_tool.gif")
+        self.rectangle = PhotoImage(file = "Images/shape_tool.gif")
+        self.oval = PhotoImage(file = "Images/oval_tool.gif")
         
         # COLOR ICONS
-        self.black = tkinter.PhotoImage(file = "Images/black.gif") #000000
-        self.gray = tkinter.PhotoImage(file = "Images/gray.gif") #808080
-        self.white = tkinter.PhotoImage(file = "Images/white.gif") #ffffff 
-        self.red = tkinter.PhotoImage(file = "Images/red.gif") #ff0000
-        self.yellow = tkinter.PhotoImage(file = "Images/yellow.gif") #ffff00
-        self.green = tkinter.PhotoImage(file = "Images/green.gif") #00ff00
-        self.cyan = tkinter.PhotoImage(file = "Images/cyan.gif") #00ffff
-        self.blue = tkinter.PhotoImage(file = "Images/blue.gif") #0000ff
-        self.magenta = tkinter.PhotoImage(file = "Images/magenta.gif") #ff00ff
+        self.black = PhotoImage(file = "Images/black.gif") #000000
+        self.gray = PhotoImage(file = "Images/gray.gif") #808080
+        self.white = PhotoImage(file = "Images/white.gif") #ffffff 
+        self.red = PhotoImage(file = "Images/red.gif") #ff0000
+        self.yellow = PhotoImage(file = "Images/yellow.gif") #ffff00
+        self.green = PhotoImage(file = "Images/green.gif") #00ff00
+        self.cyan = PhotoImage(file = "Images/cyan.gif") #00ffff
+        self.blue = PhotoImage(file = "Images/blue.gif") #0000ff
+        self.magenta = PhotoImage(file = "Images/magenta.gif") #ff00ff
+        self.brown = PhotoImage(file = "Images/brown.gif") #883d00
         
         # BRUSH WIDTH ICONS
-        self.one = tkinter.PhotoImage(file = "Images/1.gif")
-        self.two = tkinter.PhotoImage(file = "Images/2.gif")
-        self.three = tkinter.PhotoImage(file = "Images/3.gif")
-        self.four = tkinter.PhotoImage(file = "Images/4.gif")
-        self.five = tkinter.PhotoImage(file = "Images/5.gif")
-        self.six = tkinter.PhotoImage(file = "Images/6.gif")
+        self.one = PhotoImage(file = "Images/1.gif")
+        self.two = PhotoImage(file = "Images/2.gif")
+        self.three = PhotoImage(file = "Images/3.gif")
+        self.four = PhotoImage(file = "Images/4.gif")
+        self.five = PhotoImage(file = "Images/5.gif")
+        self.six = PhotoImage(file = "Images/6.gif")
         
         # SHAPE FILL ICONS
-        self.stroke = tkinter.PhotoImage(file = "Images/stroke.gif")
-        self.fill = tkinter.PhotoImage(file = "Images/fill.gif")
+        self.stroke = PhotoImage(file = "Images/stroke.gif")
+        self.fill = PhotoImage(file = "Images/fill.gif")
         
         # FILE MANAGEMENT ICONS
-        self.save = tkinter.PhotoImage(file = "Images/save.gif")
+        self.save = PhotoImage(file = "Images/save.gif")
+        self.clear = PhotoImage(file = "Images/clear.gif")
         
         TOOLS = [
             (self.pencil, PENCIL),
@@ -135,7 +137,8 @@ class Tool:
             (self.green, '#00FF00'),
             (self.cyan, '#00FFFF'),
             (self.blue, '#0000FF'),
-            (self.magenta, '#FF00FF')
+            (self.magenta, '#FF00FF'),
+            (self.brown, '#883d00')
         ]
         
         WIDTH = [
@@ -153,8 +156,8 @@ class Tool:
         ]
         
         self.whiteboard = whiteboard
-        frame1 = tkinter.Frame(parent)
-        frame2 = tkinter.Frame(parent)
+        frame1 = Frame(parent)
+        frame2 = Frame(parent)
         self._curr_tool = None
         self._curr_color = None
         self._curr_width = None
@@ -162,55 +165,54 @@ class Tool:
         
         # Create and place icons
         for img, name in TOOLS:
-            lbl = tkinter.Label(frame1, relief='raised', image = img)
+            lbl = Label(frame1, relief='raised', image = img)
             lbl._tool = name
             lbl.bind('<Button-1>', self.update_tool)
             lbl.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame1, image = self.white)
+        spacer = Label(frame1, image = self.white)
         spacer.pack(padx = 6, pady = 3)
         for img, name in COLORS:
-            lbl = tkinter.Label(frame1, relief='raised', image = img)
+            lbl = Label(frame1, relief='raised', image = img)
             lbl._color = name
             lbl.bind('<Button-1>', self.update_color)
             lbl.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame1, image = self.white)
+        spacer = Label(frame1, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        lbl = tkinter.Label(frame1, relief = 'raised', image = self.save)
-        lbl.bind('<Button-1>', self.save_image)
+        lbl = Label(frame1, relief = 'raised', image = self.save)
+        #lbl.bind('<Button-1>', self.save_image)
         lbl.pack(padx = 6, pady = 3)
         frame1.pack(side = 'left', fill = 'y', expand = True, pady = 6)
         
         for img, value in WIDTH:
-            lbl = tkinter.Label(frame2, relief='raised', image = img)
+            lbl = Label(frame2, relief='raised', image = img)
             lbl._width = value
             lbl.bind('<Button-1>', self.update_width)
             lbl.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
         for img, value in FILL:
-            lbl = tkinter.Label(frame2, relief='raised', image = img)
+            lbl = Label(frame2, relief='raised', image = img)
             lbl._fill = value
             lbl.bind('<Button-1>', self.update_fill)
             lbl.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
+        spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
-        spacer.pack(padx = 6, pady = 3)
-        spacer = tkinter.Label(frame2, image = self.white)
-        spacer.pack(padx = 6, pady = 3)
-        lbl = tkinter.Label(frame2, relief = 'raised', image = self.save)
-        lbl.bind('<Button-1>', self.save_image)
+        lbl = Label(frame2, relief = 'raised', image = self.clear)
+        lbl.bind('<Button-1>', self.clear_canvas)
         lbl.pack(padx = 6, pady = 3)
+        lbl = Label(frame2, relief = 'raised', image = self.save)
+        lbl.bind('<Button-1>', self.popup)
+        lbl.pack()
         frame2.pack(side='left', fill = 'y', expand = True, pady = 6)
         
     # Update current value and depress selected icon
@@ -246,21 +248,53 @@ class Tool:
         self._curr_fill = lbl
         self.whiteboard.select_fill(lbl._fill)
     
-    # Screenshot canvas area and save
-    def save_image(self, event):
+    def popup(self, event):
+        w = PopupWindow(root)
+        root.wait_window(w.top)
         x = root.winfo_x()
         y = root.winfo_y()
-        im = ImageGrab.grab(bbox = (x + 88, y + 28, x + 894, y + 656))
-        im.save('screenshot.png')
+        im = ImageGrab.grab(bbox = (x + 91, y + 31, x + 891, y + 653))
+        if w.name is None:
+            return
+        file_name = w.name + w.type
+        im.save(file_name)
         im.show()
+        
+    # Clear canvas
+    def clear_canvas(self, event):
+        canvas.delete("all")
+
+# Class for popup window to save image
+class PopupWindow:
+    def __init__(self, parent):
+        top = self.top = Toplevel(parent)
+        Label(top, text="File Name: ").grid(row = 1, padx = 10, pady = 5)
+        self.e = Entry(top)
+        self.e.grid(row = 1, column = 2, padx = 10, pady = 5)
+        b = Button(top, text="Save Image", command=self.ok)
+        b.grid(row = 2, column = 2, pady = 5)
+        
+        self.file_type = StringVar(top)
+        self.file_type.set(".png")
+        self.option = OptionMenu(top, self.file_type, ".png", ".jpeg", ".bmp")
+        self.option.grid(row = 1, column = 3, padx = 10, pady = 5)
+        
+        self.name = None
+        
+
+    def ok(self):
+        self.name = self.e.get() 
+        self.type = self.file_type.get()
+        self.top.destroy()
 
 
-root = tkinter.Tk()
+root = Tk()
 root.geometry("900x640+0+0")
 root.resizable(width = False, height = False)
 root.title("PyPaint")
-canvas = tkinter.Canvas(highlightbackground='black', width = 800, height = 600)
+canvas = Canvas(highlightbackground='black', width = 800, height = 600)
 whiteboard = Paint(canvas)
 tool = Tool(whiteboard)
+w = PopupWindow(root)
 canvas.pack(fill = 'both', expand = True, padx=6, pady=6)
 root.mainloop()
