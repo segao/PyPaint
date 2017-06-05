@@ -212,7 +212,7 @@ class Tool:
         lbl.pack(padx = 6, pady = 3)
         lbl = Label(frame2, relief = 'raised', image = self.save)
         lbl.bind('<Button-1>', self.popup)
-        lbl.pack()
+        lbl.pack(padx = 6, pady = 3)
         frame2.pack(side='left', fill = 'y', expand = True, pady = 6)
         
     # Update current value and depress selected icon
