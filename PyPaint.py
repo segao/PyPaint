@@ -1,5 +1,6 @@
 # PyPaint
 # Sharon Gao, 2017
+from tkinter import filedialog
 from tkinter import *
 import pyscreenshot as ImageGrab
 
@@ -118,6 +119,7 @@ class Tool:
         # FILE MANAGEMENT ICONS
         self.save = PhotoImage(file = "Images/save.gif")
         self.clear = PhotoImage(file = "Images/clear.gif")
+        self.open = PhotoImage(file = "Images/open.gif")
         
         TOOLS = [
             (self.pencil, PENCIL),
@@ -205,13 +207,14 @@ class Tool:
         spacer.pack(padx = 6, pady = 3)
         spacer = Label(frame2, image = self.white)
         spacer.pack(padx = 6, pady = 3)
-        spacer = Label(frame2, image = self.white)
-        spacer.pack(padx = 6, pady = 3)
         lbl = Label(frame2, relief = 'raised', image = self.clear)
         lbl.bind('<Button-1>', self.clear_canvas)
         lbl.pack(padx = 6, pady = 3)
+        lbl = Label(frame2, relief = 'raised', image = self.open)
+        lbl.bind('<Button-1>', self.open_file)
+        lbl.pack(padx = 6, pady = 3)
         lbl = Label(frame2, relief = 'raised', image = self.save)
-        lbl.bind('<Button-1>', self.popup)
+        lbl.bind('<Button-1>', self.save_file)
         lbl.pack(padx = 6, pady = 3)
         frame2.pack(side='left', fill = 'y', expand = True, pady = 6)
         
@@ -248,8 +251,23 @@ class Tool:
         self._curr_fill = lbl
         self.whiteboard.select_fill(lbl._fill)
     
+    def save_file(self, event):
+        filename = filedialog.asksaveasfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("gif files","*.gif"),("bmp files","*.bmp")))
+        x = root.winfo_x()
+        y = root.winfo_y()
+        im = ImageGrab.grab(bbox = (x + 91, y + 31, x + 891, y + 653))
+        if filename is None: # on cancel, don't save
+            return
+        im.save(filename)
+        im.show()
+        
+    def open_file(self, event):
+        filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("png files","*.png"),("gif files","*.gif"),("bmp files","*.bmp")))
+        self.file_to_open = PhotoImage(file = filename)
+        canvas.create_image(0, 0, image = self.file_to_open)
+        
     def popup(self, event):
-        w = PopupWindow(root)
+        w = PopupWindowSave(root)
         root.wait_window(w.top)
         x = root.winfo_x()
         y = root.winfo_y()
@@ -265,7 +283,7 @@ class Tool:
         canvas.delete("all")
 
 # Class for popup window to save image
-class PopupWindow:
+class PopupWindowSave:
     def __init__(self, parent):
         top = self.top = Toplevel(parent)
         Label(top, text="File Name: ").grid(row = 1, padx = 10, pady = 5)
@@ -280,13 +298,11 @@ class PopupWindow:
         self.option.grid(row = 1, column = 3, padx = 10, pady = 5)
         
         self.name = None
-        
 
     def ok(self):
         self.name = self.e.get() 
         self.type = self.file_type.get()
         self.top.destroy()
-
 
 root = Tk()
 root.geometry("900x640+0+0")
@@ -295,6 +311,6 @@ root.title("PyPaint")
 canvas = Canvas(highlightbackground='black', width = 800, height = 600)
 whiteboard = Paint(canvas)
 tool = Tool(whiteboard)
-w = PopupWindow(root)
+#w = PopupWindow(root)
 canvas.pack(fill = 'both', expand = True, padx=6, pady=6)
 root.mainloop()
