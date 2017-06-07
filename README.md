@@ -2,9 +2,9 @@
 MS Paint clone recreated using Python and Tkinter.
 ![Demo](https://github.com/segao/PyPaint/blob/master/PyPaint%20Demo.gif)
 To Do:
-- ~~Save~~/open features
+- ~~Save/open files~~ 
 - Canvas resizing
 - Crop/Select tools
 - Paintbucket tool
 - ~~Clear canvas tool~~
-- Color picker tool
+- ~~Color picker tool~~
