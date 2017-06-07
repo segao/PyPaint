@@ -1,6 +1,9 @@
 # PyPaint
 MS Paint clone recreated using Python and Tkinter.
-`python3 pypaint.py`
+```
+python3 pypaint.py
+```
+
 ![Demo](https://github.com/segao/PyPaint/blob/master/PyPaint_Demo.gif)
 To Do:
 - ~~Save/open files~~ 
