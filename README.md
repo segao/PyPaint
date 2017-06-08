@@ -13,3 +13,4 @@ python3 pypaint.py
 - Paintbucket tool
 - ~~Clear canvas tool~~
 - ~~Color picker tool~~
+- Allow for primary and secondary color selections
